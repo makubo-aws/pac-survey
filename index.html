@@ -233,7 +233,13 @@
   </div>
 </div>
 
-<script src="config.js"></script>
+<script>
+// CONFIG — update scriptUrl after deploying Google Apps Script
+const CONFIG = {
+  scriptUrl: "https://script.google.com/macros/s/AKfycbzPOc0LrZkZwzqH-QRNMOm4P8fMBXVCClEpl7BvrDebV5Q1072bYCqoCeMtKOX9GnfK0A/exec",
+  sheetId: "PASTE_YOUR_SHEET_ID_HERE"
+};
+</script>
 <script>
 const ratings = { q1: 0, q2: 0, q3: 0, q4: 0, q5: 0 };
 const ratingQuestions = ["q1", "q2", "q3", "q4", "q5"];
@@ -313,6 +319,7 @@ function showError(msg) {
 
 // Init
 ratingQuestions.forEach(buildRatingButtons);
+updateProgress();
 </script>
 </body>
 </html>
