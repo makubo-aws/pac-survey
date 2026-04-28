@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>ElastiCache PAC 2026 – Feedback Survey</title>
+<style>
+  :root {
+    --primary: #0972d3;
+    --primary-dark: #065299;
+    --primary-light: #e8f4fd;
+    --bg: #f4f6f8;
+    --card: #ffffff;
+    --text: #16191f;
+    --muted: #687078;
+    --border: #dfe3e8;
+    --radius: 14px;
+    --shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    background: var(--bg); color: var(--text);
+    min-height: 100vh; padding-bottom: 100px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .header {
+    background: linear-gradient(135deg, #0972d3 0%, #065299 100%);
+    color: white; padding: 28px 16px 24px; text-align: center;
+    box-shadow: 0 2px 12px rgba(9,114,211,0.3);
+  }
+  .header .eyebrow { font-size: 12px; opacity: 0.75; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .header h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; line-height: 1.3; }
+  .header .subtitle { font-size: 13px; opacity: 0.8; margin-top: 6px; line-height: 1.4; }
+
+  .container { max-width: 480px; margin: 0 auto; padding: 16px; }
+
+  .section-label {
+    font-size: 12px; font-weight: 700; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.8px;
+    margin: 24px 0 10px; padding-left: 4px;
+  }
+
+  .card {
+    background: var(--card); border-radius: var(--radius);
+    padding: 18px; margin-bottom: 12px; box-shadow: var(--shadow);
+  }
+
+  .card .question {
+    font-size: 15px; font-weight: 600; margin-bottom: 14px; line-height: 1.4;
+  }
+
+  /* Star / scale rating */
+  .rating-row {
+    display: flex; justify-content: space-between; gap: 6px;
+  }
+  .rating-row button {
+    flex: 1; padding: 12px 4px; border: 2px solid var(--border);
+    border-radius: 10px; background: white; font-size: 15px;
+    font-weight: 700; cursor: pointer; color: var(--muted);
+    transition: all 0.15s; line-height: 1;
+  }
+  .rating-row button.selected {
+    background: var(--primary); color: white; border-color: var(--primary);
+    box-shadow: 0 2px 8px rgba(9,114,211,0.3);
+  }
+  .rating-labels {
+    display: flex; justify-content: space-between;
+    margin-top: 6px; padding: 0 2px;
+  }
+  .rating-labels span { font-size: 10px; color: var(--muted); }
+
+  /* Text areas */
+  .card textarea {
+    width: 100%; padding: 12px; border: 2px solid var(--border);
+    border-radius: 10px; font-size: 14px; font-family: inherit;
+    resize: vertical; min-height: 90px; outline: none;
+    transition: border-color 0.2s; color: var(--text);
+    line-height: 1.5;
+  }
+  .card textarea:focus { border-color: var(--primary); }
+
+  /* Name/company input */
+  .card input[type=text] {
+    width: 100%; padding: 14px; border: 2px solid var(--border);
+    border-radius: 10px; font-size: 16px; outline: none;
+    transition: border-color 0.2s;
+  }
+  .card input[type=text]:focus { border-color: var(--primary); }
+
+  .submit-bar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: white; padding: 12px 16px;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.08); z-index: 10;
+  }
+  .submit-bar button {
+    width: 100%; max-width: 480px; margin: 0 auto; display: block;
+    padding: 16px; background: linear-gradient(135deg, #0972d3 0%, #065299 100%);
+    color: white; border: none; border-radius: 12px; font-size: 17px;
+    font-weight: 700; cursor: pointer; letter-spacing: -0.2px;
+    box-shadow: 0 4px 12px rgba(9,114,211,0.3); transition: all 0.2s;
+  }
+  .submit-bar button:disabled { background: #b0b8c1; cursor: not-allowed; box-shadow: none; }
+  .submit-bar button:active:not(:disabled) { transform: scale(0.98); }
+
+  .overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+    display: none; align-items: center; justify-content: center;
+    z-index: 100; backdrop-filter: blur(4px);
+  }
+  .overlay.show { display: flex; }
+  .overlay-box {
+    background: white; border-radius: 20px; padding: 36px 28px;
+    text-align: center; max-width: 320px; margin: 16px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  }
+  .overlay-box .icon { font-size: 56px; margin-bottom: 16px; }
+  .overlay-box h2 { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+  .overlay-box p { color: var(--muted); font-size: 14px; line-height: 1.5; }
+  .overlay-box button {
+    margin-top: 16px; padding: 10px 24px;
+    background: var(--primary); color: white; border: none;
+    border-radius: 8px; font-size: 14px; cursor: pointer; font-weight: 600;
+  }
+
+  .spinner {
+    display: inline-block; width: 20px; height: 20px;
+    border: 3px solid rgba(255,255,255,0.3); border-top-color: white;
+    border-radius: 50%; animation: spin 0.6s linear infinite;
+    vertical-align: middle; margin-right: 8px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .progress-bar {
+    height: 4px; background: rgba(255,255,255,0.2); border-radius: 2px; margin-top: 12px;
+  }
+  .progress-fill {
+    height: 100%; background: white; border-radius: 2px;
+    transition: width 0.3s; width: 0%;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="eyebrow">ElastiCache PAC 2026 · Seattle</div>
+  <h1>Event Feedback Survey</h1>
+  <div class="subtitle">Your feedback helps us make future events even better</div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+</div>
+
+<div class="container">
+
+  <div class="section-label">About You</div>
+  <div class="card">
+    <div class="question">Your name <span style="color:var(--muted);font-weight:400">(optional)</span></div>
+    <input type="text" id="name" placeholder="Your name">
+  </div>
+  <div class="card">
+    <div class="question">Your company</div>
+    <input type="text" id="company" placeholder="Company name">
+  </div>
+
+  <div class="section-label">Overall Experience</div>
+
+  <div class="card" id="card-q1">
+    <div class="question">How satisfied were you with the overall conference experience?</div>
+    <div class="rating-row" id="q1"></div>
+    <div class="rating-labels"><span>Very Dissatisfied</span><span>Very Satisfied</span></div>
+  </div>
+
+  <div class="card" id="card-q2">
+    <div class="question">How valuable was the time spent with our product team?</div>
+    <div class="rating-row" id="q2"></div>
+    <div class="rating-labels"><span>Not Valuable</span><span>Extremely Valuable</span></div>
+  </div>
+
+  <div class="card" id="card-q3">
+    <div class="question">How likely are you to attend a future event with us?</div>
+    <div class="rating-row" id="q3"></div>
+    <div class="rating-labels"><span>Very Unlikely</span><span>Very Likely</span></div>
+  </div>
+
+  <div class="card" id="card-q4">
+    <div class="question">How likely are you to recommend attending a similar event to a colleague?</div>
+    <div class="rating-row" id="q4"></div>
+    <div class="rating-labels"><span>Very Unlikely</span><span>Very Likely</span></div>
+  </div>
+
+  <div class="card" id="card-q5">
+    <div class="question">How satisfied were you with the technical depth of the discussions?</div>
+    <div class="rating-row" id="q5"></div>
+    <div class="rating-labels"><span>Too Surface-Level</span><span>Excellent Depth</span></div>
+  </div>
+
+  <div class="section-label">Open Feedback</div>
+
+  <div class="card">
+    <div class="question">Which sessions or discussions were most valuable to you?</div>
+    <textarea id="q6" placeholder="Share what stood out..."></textarea>
+  </div>
+
+  <div class="card">
+    <div class="question">Which topics would you have liked to see covered in more depth?</div>
+    <textarea id="q7" placeholder="What would you add or expand on?"></textarea>
+  </div>
+
+  <div class="card">
+    <div class="question">Anything else you would like to share?</div>
+    <textarea id="q8" placeholder="Any other thoughts, suggestions, or feedback..."></textarea>
+  </div>
+
+</div>
+
+<div class="submit-bar">
+  <button id="submitBtn" onclick="submitSurvey()">Submit Feedback</button>
+</div>
+
+<div class="overlay" id="successOverlay">
+  <div class="overlay-box">
+    <div class="icon">🙏</div>
+    <h2>Thank you!</h2>
+    <p>Your feedback has been recorded. We truly appreciate you taking the time to share your thoughts.</p>
+  </div>
+</div>
+
+<div class="overlay" id="errorOverlay">
+  <div class="overlay-box">
+    <div class="icon">⚠️</div>
+    <h2>Oops</h2>
+    <p id="errorMsg">Something went wrong. Please try again.</p>
+    <button onclick="document.getElementById('errorOverlay').classList.remove('show')">OK</button>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script>
+const ratings = { q1: 0, q2: 0, q3: 0, q4: 0, q5: 0 };
+const ratingQuestions = ["q1", "q2", "q3", "q4", "q5"];
+
+function buildRatingButtons(qId) {
+  const container = document.getElementById(qId);
+  for (let i = 1; i <= 5; i++) {
+    const btn = document.createElement("button");
+    btn.textContent = i;
+    btn.setAttribute("aria-label", `${i} out of 5`);
+    btn.onclick = () => setRating(qId, i);
+    container.appendChild(btn);
+  }
+}
+
+function setRating(qId, val) {
+  ratings[qId] = val;
+  const btns = document.getElementById(qId).querySelectorAll("button");
+  btns.forEach((b, i) => b.classList.toggle("selected", i + 1 === val));
+  updateProgress();
+}
+
+function updateProgress() {
+  const answered = ratingQuestions.filter(q => ratings[q] > 0).length;
+  const pct = Math.round((answered / ratingQuestions.length) * 100);
+  document.getElementById("progressFill").style.width = pct + "%";
+}
+
+async function submitSurvey() {
+  const company = document.getElementById("company").value.trim();
+  if (!company) { showError("Please enter your company name."); return; }
+
+  const unanswered = ratingQuestions.filter(q => ratings[q] === 0);
+  if (unanswered.length > 0) {
+    showError("Please answer all rating questions before submitting.");
+    document.getElementById("card-" + unanswered[0]).scrollIntoView({ behavior: "smooth", block: "center" });
+    return;
+  }
+
+  const btn = document.getElementById("submitBtn");
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Submitting...';
+
+  const row = {
+    timestamp: new Date().toISOString(),
+    name: document.getElementById("name").value.trim() || "Anonymous",
+    company: company,
+    q1_overall_satisfaction: ratings.q1,
+    q2_product_team_value: ratings.q2,
+    q3_likelihood_attend_future: ratings.q3,
+    q4_likelihood_recommend: ratings.q4,
+    q5_technical_depth: ratings.q5,
+    q6_most_valuable: document.getElementById("q6").value.trim(),
+    q7_more_depth: document.getElementById("q7").value.trim(),
+    q8_other: document.getElementById("q8").value.trim()
+  };
+
+  try {
+    const encoded = encodeURIComponent(JSON.stringify(row));
+    const url = CONFIG.scriptUrl + "?data=" + encoded;
+    const img = new Image();
+    img.src = url;
+    setTimeout(() => {
+      document.getElementById("successOverlay").classList.add("show");
+    }, 1000);
+  } catch (e) {
+    btn.disabled = false;
+    btn.textContent = "Submit Feedback";
+    showError("Failed to submit. Please check your connection and try again.");
+  }
+}
+
+function showError(msg) {
+  document.getElementById("errorMsg").textContent = msg;
+  document.getElementById("errorOverlay").classList.add("show");
+}
+
+// Init
+ratingQuestions.forEach(buildRatingButtons);
+</script>
+</body>
+</html>
